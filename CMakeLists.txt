@@ -55,7 +55,8 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -W -Wextra -msse2 -mfpmath=ss
 ############################################################
 add_library(objlib OBJECT ${objsrc})
 set_property(TARGET objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
-target_compile_options(objlib PRIVATE -Dexit=myExit -Dmain=astc_main)
+#target_compile_options(objlib PRIVATE -Dexit=myExit -Dmain=astc_main)
+target_compile_options(objlib PRIVATE -Dmain=astc_main)
 
 add_library(astc SHARED $<TARGET_OBJECTS:objlib>)
 set_target_properties(astc PROPERTIES VERSION ${PROJECT_VERSION})
@@ -67,7 +68,9 @@ add_library(astc_static STATIC $<TARGET_OBJECTS:objlib>)
 # Create an test executable
 ############################################################
 add_executable(astcenc_test ${libtest_src})
-target_link_libraries(astcenc_test PRIVATE astc pthread)
+#set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+find_package( Threads )
+target_link_libraries(astcenc_test PRIVATE astc ${CMAKE_THREAD_LIBS_INIT})
 
 ############################################################
 # Install
