@@ -48,7 +48,13 @@ set(libtest_src
 
 include_directories( astc-encoder/Source )
 
+if(WIN32)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  /D_USE_MATH_DEFINES /D_CRT_SECURE_NO_WARNINGS" CACHE STRING "Set C++ Compiler Flags" FORCE)
+else()
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -W -Wextra -msse2 -mfpmath=sse" CACHE STRING "Set C++ Compiler Flags" FORCE)
+endif()
 
 ############################################################
 # Create libraries
@@ -76,7 +82,13 @@ target_link_libraries(astcenc_test PRIVATE astc ${CMAKE_THREAD_LIBS_INIT})
 # Install
 ############################################################
 include(GNUInstallDirs)
+
+if(WIN32)
+install(TARGETS astc RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS astc_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(FILES ${libhdr} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+else()
 install(TARGETS astc LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(TARGETS astc_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES ${libhdr} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
+endif()  
