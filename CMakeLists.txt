@@ -48,8 +48,9 @@ set(libtest_src
 
 include_directories( astc-encoder/Source )
 
-if(WIN32)
 set(CMAKE_CXX_STANDARD 11)
+
+if(WIN32)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  /D_USE_MATH_DEFINES /D_CRT_SECURE_NO_WARNINGS" CACHE STRING "Set C++ Compiler Flags" FORCE)
 else()
